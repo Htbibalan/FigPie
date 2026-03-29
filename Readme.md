@@ -46,3 +46,12 @@ Windows installer (.exe) or .sh link installer
 Mac support improvements
 Better snapping / alignment guides
 SVG export
+
+
+
+## Citation
+
+If you use FigPie, please cite:
+
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.0) [Software]. Zenodo.  
+https://doi.org/10.5281/zenodo.19312444
