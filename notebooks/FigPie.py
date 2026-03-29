@@ -254,6 +254,37 @@ def normalize_runs(runs: List[Dict]) -> List[Dict]:
 def runs_to_text(runs: List[Dict]) -> str:
     return "".join(r.get("text", "") for r in runs or [])
 
+# @dataclass
+# class PanelItem:
+#     id: int
+#     kind: str = "panel"
+#     source_path: Optional[str] = None
+#     pil_image: Optional[Image.Image] = None
+#     original_size: Tuple[int, int] = (100, 100)
+#     x: int = 50
+#     y: int = 50
+#     w: int = 200
+#     h: int = 150
+#     label: str = ""
+#     show_label: bool = True
+#     label_font_size: int = DEFAULT_LABEL_FONT_SIZE
+#     label_font_family: str = "Arial"
+#     label_offset_x: int = 10
+#     label_offset_y: int = 10
+#     border_width: int = 0
+#     border_color: str = "black"
+#     z_index: int = 0
+#     group_id: Optional[int] = None
+#     tk_preview: Optional[ImageTk.PhotoImage] = None
+#     _preview_cache_key: Optional[Tuple] = None
+#     _preview_cache_photo: Optional[ImageTk.PhotoImage] = None
+#     def bbox(self):
+#         return self.x, self.y, self.x + self.w, self.y + self.h
+#     def contains(self, px: int, py: int) -> bool:
+#         return self.x <= px <= self.x + self.w and self.y <= py <= self.y + self.h
+#     def resize_handle_hit(self, px: int, py: int, handle_model: int) -> bool:
+#         return (self.x + self.w - handle_model <= px <= self.x + self.w + handle_model and
+#                 self.y + self.h - handle_model <= py <= self.y + self.h + handle_model)
 @dataclass
 class PanelItem:
     id: int
@@ -269,6 +300,7 @@ class PanelItem:
     show_label: bool = True
     label_font_size: int = DEFAULT_LABEL_FONT_SIZE
     label_font_family: str = "Arial"
+    label_color: str = "black"
     label_offset_x: int = 10
     label_offset_y: int = 10
     border_width: int = 0
@@ -1027,6 +1059,22 @@ class FigureBoardApp:
         cloned = []
         for item in items:
             if isinstance(item, PanelItem):
+                # cloned.append(PanelItem(
+                #     id=item.id,
+                #     source_path=item.source_path,
+                #     pil_image=item.pil_image.copy() if item.pil_image else None,
+                #     original_size=item.original_size,
+                #     x=item.x, y=item.y, w=item.w, h=item.h,
+                #     label=item.label, show_label=item.show_label,
+                #     label_font_size=item.label_font_size,
+                #     label_font_family=item.label_font_family,
+                #     label_offset_x=item.label_offset_x,
+                #     label_offset_y=item.label_offset_y,
+                #     border_width=item.border_width,
+                #     border_color=item.border_color,
+                #     z_index=item.z_index,
+                #     group_id=item.group_id
+                # ))
                 cloned.append(PanelItem(
                     id=item.id,
                     source_path=item.source_path,
@@ -1036,6 +1084,7 @@ class FigureBoardApp:
                     label=item.label, show_label=item.show_label,
                     label_font_size=item.label_font_size,
                     label_font_family=item.label_font_family,
+                    label_color=item.label_color,
                     label_offset_x=item.label_offset_x,
                     label_offset_y=item.label_offset_y,
                     border_width=item.border_width,
@@ -1230,6 +1279,23 @@ class FigureBoardApp:
         ow, oh = img.size
         w, h = fit_size_keep_aspect(ow, oh, 350, 260)
         offset = 20 * (len(self.items) % 10)
+        # panel = PanelItem(
+        #     id=self.get_next_id(),
+        #     source_path=source_path,
+        #     pil_image=img,
+        #     original_size=(ow, oh),
+        #     x=50 + offset,
+        #     y=50 + offset,
+        #     w=w,
+        #     h=h,
+        #     label="",
+        #     show_label=True,
+        #     label_font_size=self.default_label_size.get(),
+        #     label_font_family=self.default_font_family.get(),
+        #     label_offset_x=self.default_label_offset_x.get(),
+        #     label_offset_y=self.default_label_offset_y.get(),
+        #     z_index=max((i.z_index for i in self.items), default=-1) + 1,
+        # )
         panel = PanelItem(
             id=self.get_next_id(),
             source_path=source_path,
@@ -1243,6 +1309,7 @@ class FigureBoardApp:
             show_label=True,
             label_font_size=self.default_label_size.get(),
             label_font_family=self.default_font_family.get(),
+            label_color="black",
             label_offset_x=self.default_label_offset_x.get(),
             label_offset_y=self.default_label_offset_y.get(),
             z_index=max((i.z_index for i in self.items), default=-1) + 1,
@@ -1449,14 +1516,25 @@ class FigureBoardApp:
             )
             tx = self.sx(item.x + item.label_offset_x)
             ty = self.sy(item.y + item.label_offset_y)
+            # self.canvas.create_text(
+            #     tx,
+            #     ty,
+            #     text=item.label,
+            #     anchor="nw",
+            #     font=font_style,
+            #     fill="black"
+            # )
             self.canvas.create_text(
                 tx,
                 ty,
                 text=item.label,
                 anchor="nw",
                 font=font_style,
-                fill="black"
+                fill=item.label_color
             )
+
+
+
         if item.id in self.selected_ids:
             lb = self.panel_label_bbox(item)
             if lb:
@@ -2155,13 +2233,34 @@ class FigureBoardApp:
             self.set_status("Rich text updated")
         RichTextEditor(self.root, item, on_save)
 
+    # def pick_selected_text_colour(self):
+    #     if len(self.selected_ids) != 1:
+    #         return
+    #     item = self.get_item_by_id(self.selected_ids[0])
+    #     if item is None:
+    #         return
+    #     initial = item.fill if isinstance(item, TextItem) else item.color if isinstance(item, ShapeItem) else item.border_color if isinstance(item, PanelItem) else "black"
+    #     color = colorchooser.askcolor(color=initial, title="Choose colour")[1]
+    #     if color:
+    #         self.save_undo_state()
+    #         if isinstance(item, TextItem):
+    #             item.fill = color
+    #             item._preview_cache_key = None
+    #             item._preview_cache_photo = None
+    #         elif isinstance(item, ShapeItem):
+    #             item.color = color
+    #         elif isinstance(item, PanelItem):
+    #             item.border_color = color
+    #         self.redraw()
+
+
     def pick_selected_text_colour(self):
         if len(self.selected_ids) != 1:
             return
         item = self.get_item_by_id(self.selected_ids[0])
         if item is None:
             return
-        initial = item.fill if isinstance(item, TextItem) else item.color if isinstance(item, ShapeItem) else item.border_color if isinstance(item, PanelItem) else "black"
+        initial = item.fill if isinstance(item, TextItem) else item.color if isinstance(item, ShapeItem) else item.label_color if isinstance(item, PanelItem) else "black"
         color = colorchooser.askcolor(color=initial, title="Choose colour")[1]
         if color:
             self.save_undo_state()
@@ -2172,8 +2271,20 @@ class FigureBoardApp:
             elif isinstance(item, ShapeItem):
                 item.color = color
             elif isinstance(item, PanelItem):
-                item.border_color = color
+                item.label_color = color
             self.redraw()
+
+    def pick_selected_label_colour(self):
+        if len(self.selected_ids) != 1:
+            return
+        item = self.get_item_by_id(self.selected_ids[0])
+        if not isinstance(item, PanelItem):
+            return
+        color = colorchooser.askcolor(color=item.label_color, title="Choose label colour")[1]
+        if color:
+            self.save_undo_state()
+            item.label_color = color
+            self.redraw() 
 
     def bring_to_front(self):
         selected = self.get_selected_items()
@@ -2203,6 +2314,22 @@ class FigureBoardApp:
         new_ids = []
         for sel in selected:
             if isinstance(sel, PanelItem):
+                # dup = PanelItem(
+                #     id=self.get_next_id(),
+                #     source_path=sel.source_path,
+                #     pil_image=sel.pil_image.copy() if sel.pil_image else None,
+                #     original_size=sel.original_size,
+                #     x=sel.x + 20, y=sel.y + 20, w=sel.w, h=sel.h,
+                #     label=sel.label, show_label=sel.show_label,
+                #     label_font_size=sel.label_font_size,
+                #     label_font_family=sel.label_font_family,
+                #     label_offset_x=sel.label_offset_x,
+                #     label_offset_y=sel.label_offset_y,
+                #     border_width=sel.border_width,
+                #     border_color=sel.border_color,
+                #     z_index=max((i.z_index for i in self.items), default=0) + 1,
+                #     group_id=sel.group_id
+                # )
                 dup = PanelItem(
                     id=self.get_next_id(),
                     source_path=sel.source_path,
@@ -2212,6 +2339,7 @@ class FigureBoardApp:
                     label=sel.label, show_label=sel.show_label,
                     label_font_size=sel.label_font_size,
                     label_font_family=sel.label_font_family,
+                    label_color=sel.label_color,
                     label_offset_x=sel.label_offset_x,
                     label_offset_y=sel.label_offset_y,
                     border_width=sel.border_width,
@@ -2723,9 +2851,14 @@ class FigureBoardApp:
                                    width=max(1, int(round(item.border_width * scale))))
                 if item.show_label and item.label:
                     font = get_font(item.label_font_family, max(6, int(round(item.label_font_size * scale))), bold=True)
+                    # draw.text(
+                    #     (int(round((item.x + item.label_offset_x) * scale)), int(round((item.y + item.label_offset_y) * scale))),
+                    #     item.label, fill="black", font=font
+                    # )
+
                     draw.text(
                         (int(round((item.x + item.label_offset_x) * scale)), int(round((item.y + item.label_offset_y) * scale))),
-                        item.label, fill="black", font=font
+                        item.label, fill=item.label_color, font=font
                     )
             elif isinstance(item, ShapeItem):
                 ix1 = int(round(item.x * scale))
@@ -2835,12 +2968,14 @@ class FigureBoardApp:
                 "show_label": item.show_label,
                 "label_font_size": item.label_font_size,
                 "label_font_family": item.label_font_family,
+                "label_color": item.label_color,
                 "label_offset_x": item.label_offset_x,
                 "label_offset_y": item.label_offset_y,
                 "border_width": item.border_width,
                 "border_color": item.border_color,
                 "z_index": item.z_index,
                 "group_id": item.group_id,
+
             }
         if isinstance(item, ShapeItem):
             return {
@@ -2876,6 +3011,24 @@ class FigureBoardApp:
     def project_dict_to_item(self, data: Dict) -> CanvasItem:
         if data["kind"] == "panel":
             img = base64_png_to_image(data["image_b64"]) if data.get("image_b64") else None
+            # return PanelItem(
+            #     id=data["id"],
+            #     source_path=data.get("source_path"),
+            #     pil_image=img,
+            #     original_size=tuple(data.get("original_size", img.size if img else (100, 100))),
+            #     x=data["x"], y=data["y"], w=data["w"], h=data["h"],
+            #     label=data.get("label", ""),
+            #     show_label=data.get("show_label", True),
+            #     label_font_size=data.get("label_font_size", DEFAULT_LABEL_FONT_SIZE),
+            #     label_font_family=data.get("label_font_family", "Arial"),
+            #     label_offset_x=data.get("label_offset_x", 10),
+            #     label_offset_y=data.get("label_offset_y", 10),
+            #     border_width=data.get("border_width", 0),
+            #     border_color=data.get("border_color", "black"),
+            #     z_index=data.get("z_index", 0),
+            #     group_id=data.get("group_id"),
+            # )
+        
             return PanelItem(
                 id=data["id"],
                 source_path=data.get("source_path"),
@@ -2886,6 +3039,7 @@ class FigureBoardApp:
                 show_label=data.get("show_label", True),
                 label_font_size=data.get("label_font_size", DEFAULT_LABEL_FONT_SIZE),
                 label_font_family=data.get("label_font_family", "Arial"),
+                label_color=data.get("label_color", "black"),
                 label_offset_x=data.get("label_offset_x", 10),
                 label_offset_y=data.get("label_offset_y", 10),
                 border_width=data.get("border_width", 0),

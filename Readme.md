@@ -8,26 +8,39 @@
 ![Banner Image](https://github.com/Htbibalan/FigPie/blob/master/src/banner.png)
 
 ## ✨ Features
+
 📁 Drag & drop images and PDFs to the canvas
+
 🤖 Automatic and smart panel labelling (A, B, C…)
+
 🧩 Flexible layout (grid, manual, alignment tools)
+
 ✏️ Rich text editor (bold, italic, alignment, rotation)
+
 🔲 Add shapes: rectangle, circle, line, arrow
+
 🎯 Easy precise positioning & resizing
-📏 Custom and auto-adjustable canvas size (px / inch / cm)
+
+📏 Custom and auto-adjustable canvas size
+
 ✂️ Automatic and easy white/blank-space cropping and trimming of final product
+
 💾 Save / load projects to work later
+
 🖼️ Export to: PNG,TIFF, and PDF
 
 
 
 ## 🖥️ Installation
 ##### For now works and tested on Windows OS
-git clone https://github.com/Htbibalan/FigPie.git
-cd FigPie
-cd Src and install the env using:
+        
+        git clone https://github.com/Htbibalan/FigPie.git
+        
+        cd FigPie
+        
+        cd Src and install the env using:
 
-            conda env create -f environment.yml
+        conda env create -f environment.yml
 after env is created, run:
 
             conda activate FigPie
