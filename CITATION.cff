@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "FigPie"
+message: "If you use FigPie, please cite it as below."
+type: software
+
+authors:
+  - family-names: "Taghipourbibalan"
+    given-names: "Hamid"
+
+year: 2026
+
+version: "0.1.0"
+
+repository-code: "https://github.com/Htbibalan/FigPie.git"
+
+abstract: >
+  FigPie is a lightweight Python-based GUI tool for assembling
+  scientific multi-panel figures from images, PDFs, and plots,
+  with automatic labelling, flexible layout tools, and
+  high-resolution export.
+
+license: "Apache-2.0"
