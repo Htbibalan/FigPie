@@ -49,6 +49,7 @@ Run:
             python FigPie.py
 #### Option 2:
 Windows users can download FigPieSetup.exe from the latest release and install it.
+https://github.com/Htbibalan/FigPie/releases/latest
 
 ### 🪪 Author
 **Developed by Hamid Taghipourbibalan | UiT: The Arctic University of Norway, Tromsø, Norway**
