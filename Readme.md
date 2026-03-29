@@ -69,4 +69,4 @@ SVG export
 If you use FigPie, please cite:
 
 Taghipourbibalan, H. (2026). FigPie (Version 0.1.1) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19320709
+https://doi.org/10.5281/zenodo.19321987
