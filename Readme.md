@@ -32,7 +32,7 @@
 
 
 ## 🖥️ Installation
-##### For now works and tested on Windows OS
+##### Option 1: 
         
         git clone https://github.com/Htbibalan/FigPie.git
         
@@ -47,7 +47,8 @@ after env is created, run:
 Run:
 
             python FigPie.py
-
+#### Option 2:
+Windows users can download FigPieSetup.exe from the latest release and install it.
 
 ### 🪪 Author
 **Developed by Hamid Taghipourbibalan | UiT: The Arctic University of Norway, Tromsø, Norway**
