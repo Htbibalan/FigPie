@@ -41,7 +41,7 @@ Run:
 
 
 
-### 🛠️ To-Do
+### 🛠️ To-Do/ Updates needed:
 Windows installer (.exe) or .sh link installer
 Mac support improvements
 Better snapping / alignment guides
