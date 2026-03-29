@@ -5,7 +5,7 @@
 ## 🚀 Why FigPie?
 #### Many researchers and students generate plots in Python / R / MATLAB then struggle in Illustrator / PowerPoint.  FigPie removes that second step. It’s built specifically for papers , theses, presentations and scientific posters.
 
-
+![Banner Image](https://github.com/Htbibalan/FigPie/blob/master/src/banner.png)
 
 ## ✨ Features
 📁 Drag & drop images and PDFs to the canvas
