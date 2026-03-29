@@ -37,8 +37,7 @@ Run:
 
 
 ### 🪪 Author
- Developed by Hamid Taghipour
-University of Tromsø (UiT), Norway
+**Developed by Hamid Taghipourbibalan | UiT: The Arctic University of Norway, Tromsø, Norway**
 
 
 
