@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "FigPie"
+title: "FigPie 🍰"
 message: "If you use FigPie, please cite it as below."
 type: software
 
@@ -11,7 +11,9 @@ year: 2026
 
 version: "0.1.0"
 
-repository-code: "https://github.com/Htbibalan/FigPie.git"
+doi: "10.5281/zenodo.19312444"
+
+repository-code: "https://github.com/Htbibalan/FigPie"
 
 abstract: >
   FigPie is a lightweight Python-based GUI tool for assembling
