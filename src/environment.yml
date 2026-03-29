@@ -1,4 +1,4 @@
-name: figboard
+name: FigPie
 channels:
   - conda-forge
   - defaults
