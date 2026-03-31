@@ -1,5 +1,5 @@
 # 🍰 FigPie:   Make scientific figures as easy as pie
-
+##### 🚧🏗️ Under construction, check for updates.🏗️🚧
 #### FigPie is a lightweight, drag-and-drop GUI tool for assembling scientific figures from images, PDFs, and plots without needing heavy,expensive or overkill software like Illustrator, Affinity,  PowerPoint and such. It is designed based on my lived-experience for researchers who want fast, clean, publication-ready figures.
 
 ## 🚀 Why FigPie?
@@ -51,22 +51,34 @@ Run:
 Windows users can download FigPieSetup.exe from the latest release and install it.
 https://github.com/Htbibalan/FigPie/releases/latest
 
+Security settings might stop you from downloading, or if needed, right click on the setupfile and from Properties menu check " Unblock" box.
+
 ### 🪪 Author
 **Developed by Hamid Taghipourbibalan | UiT: The Arctic University of Norway, Tromsø, Norway**
 
 
 
 ### 🛠️ To-Do/ Updates needed:
-Windows installer (.exe) or .sh link installer
-Mac support improvements
+Mac/ Linux support-test improvements
+
 Better snapping / alignment guides
+
 SVG export
 
+G.interface enhancement, remove auxiliary and old double-functions
+
+Shortcut key fix
+
+Reconfigure GUI buttons left-right panel 
+
+Shape insert enhancement 
+
+add simple manual file
 
 
 ## Citation
 
 If you use FigPie, please cite:
 
-Taghipourbibalan, H. (2026). FigPie (Version 0.1.1) [Software]. Zenodo.  
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.2) [Software]. Zenodo.  
 https://doi.org/10.5281/zenodo.19321987
