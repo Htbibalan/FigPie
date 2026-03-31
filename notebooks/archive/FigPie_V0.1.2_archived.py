@@ -84,13 +84,13 @@ class SplashScreen:
         self.root.destroy()
 
 APP_TITLE = "FigPie 🍰"
-PROJECT_VERSION = 1.3
+PROJECT_VERSION = 1
 DEFAULT_CANVAS_W = 1600
-DEFAULT_CANVAS_H = 1200
+DEFAULT_CANVAS_H = 1000
 DEFAULT_BG = "white"
-DEFAULT_OUTER_MARGIN = 20
-DEFAULT_GAP_X = 1
-DEFAULT_GAP_Y = 1
+DEFAULT_OUTER_MARGIN = 30
+DEFAULT_GAP_X = 10
+DEFAULT_GAP_Y = 10
 DEFAULT_LABEL_FONT_SIZE = 28
 DEFAULT_TEXT_FONT_SIZE = 22
 DEFAULT_LINE_SPACING = 1.15
@@ -384,172 +384,47 @@ class ShapeItem:
 CanvasItem = Union[PanelItem, TextItem, ShapeItem]
 
 
-# class ScrollableFrame(ttk.Frame):
-#     def __init__(self, parent, width=260):
-#         super().__init__(parent)
-#         self.canvas = tk.Canvas(self, highlightthickness=0, width=width)
-#         self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
-#         self.inner = ttk.Frame(self.canvas)
-#         self.inner.bind("<Configure>", self._on_frame_configure)
-#         self.window_id = self.canvas.create_window((0, 0), window=self.inner, anchor="nw")
-#         self.canvas.configure(yscrollcommand=self.vsb.set)
-#         self.canvas.pack(side="left", fill="both", expand=True)
-#         self.vsb.pack(side="right", fill="y")
-#         self.canvas.bind("<Configure>", self._on_canvas_configure)
-#         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel, add="+")
-#         self.canvas.bind_all("<Button-4>", self._on_mousewheel_linux, add="+")
-#         self.canvas.bind_all("<Button-5>", self._on_mousewheel_linux, add="+")
-#         self.inner.bind("<Enter>", lambda e: self.canvas.focus_set())
-#     def _on_frame_configure(self, _event=None):
-#         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-#     # def _on_canvas_configure(self, event):
-#     #     self.canvas.itemconfigure(self.window_id, width=event.width)
-#     def _on_canvas_configure(self, event):
-#         self.canvas.itemconfigure(self.window_id, width=event.width)
-#         self.canvas.coords(self.window_id, 0, 0)     
-#     def _on_mousewheel(self, event):
-#         if self.winfo_ismapped():
-#             try:
-#                 widget = self.winfo_containing(event.x_root, event.y_root)
-#             except Exception:
-#                 widget = None
-#             if widget and str(widget).startswith(str(self)):
-#                 delta = -1 * int(event.delta / 120) if event.delta else 0
-#                 if delta:
-#                     self.canvas.yview_scroll(delta, "units")
-#     def _on_mousewheel_linux(self, event):
-#         if self.winfo_ismapped():
-#             try:
-#                 widget = self.winfo_containing(event.x_root, event.y_root)
-#             except Exception:
-#                 widget = None
-#             if widget and str(widget).startswith(str(self)):
-#                 if event.num == 4:
-#                     self.canvas.yview_scroll(-1, "units")
-#                 elif event.num == 5:
-#                     self.canvas.yview_scroll(1, "units")
-
-
-
-
-
-
-
 class ScrollableFrame(ttk.Frame):
     def __init__(self, parent, width=260):
         super().__init__(parent)
         self.canvas = tk.Canvas(self, highlightthickness=0, width=width)
         self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.inner = ttk.Frame(self.canvas)
-
         self.inner.bind("<Configure>", self._on_frame_configure)
         self.window_id = self.canvas.create_window((0, 0), window=self.inner, anchor="nw")
-
         self.canvas.configure(yscrollcommand=self.vsb.set)
         self.canvas.pack(side="left", fill="both", expand=True)
         self.vsb.pack(side="right", fill="y")
-
         self.canvas.bind("<Configure>", self._on_canvas_configure)
-
         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel, add="+")
         self.canvas.bind_all("<Button-4>", self._on_mousewheel_linux, add="+")
         self.canvas.bind_all("<Button-5>", self._on_mousewheel_linux, add="+")
         self.inner.bind("<Enter>", lambda e: self.canvas.focus_set())
-
     def _on_frame_configure(self, _event=None):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-
     def _on_canvas_configure(self, event):
         self.canvas.itemconfigure(self.window_id, width=event.width)
-        self.canvas.coords(self.window_id, 0, 0)
-
-    def scroll_to_top(self):
-        self.update_idletasks()
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-        self.canvas.yview_moveto(0)
-
-    # def _on_mousewheel(self, event):
-    #     if self.winfo_ismapped():
-    #         try:
-    #             widget = self.winfo_containing(event.x_root, event.y_root)
-    #         except Exception:
-    #             widget = None
-    #         if widget and str(widget).startswith(str(self)):
-    #             delta = -1 * int(event.delta / 120) if event.delta else 0
-    #             if delta:
-    #                 self.canvas.yview_scroll(delta, "units")
-
-    # def _on_mousewheel_linux(self, event):
-    #     if self.winfo_ismapped():
-    #         try:
-    #             widget = self.winfo_containing(event.x_root, event.y_root)
-    #         except Exception:
-    #             widget = None
-    #         if widget and str(widget).startswith(str(self)):
-    #             if event.num == 4:
-    #                 self.canvas.yview_scroll(-1, "units")
-    #             elif event.num == 5:
-    #                 self.canvas.yview_scroll(1, "units")
-
-
     def _on_mousewheel(self, event):
-        if not self.winfo_ismapped():
-            return
-        try:
-            widget = self.winfo_containing(event.x_root, event.y_root)
-        except Exception:
-            widget = None
-        if not (widget and str(widget).startswith(str(self))):
-            return
-
-        bbox = self.canvas.bbox("all")
-        if not bbox:
-            return
-        content_h = bbox[3] - bbox[1]
-        visible_h = self.canvas.winfo_height()
-        if content_h <= visible_h + 1:
-            return
-
-        delta = -1 * int(event.delta / 120) if event.delta else 0
-        if delta:
-            self.canvas.yview_scroll(delta, "units")
-
+        if self.winfo_ismapped():
+            try:
+                widget = self.winfo_containing(event.x_root, event.y_root)
+            except Exception:
+                widget = None
+            if widget and str(widget).startswith(str(self)):
+                delta = -1 * int(event.delta / 120) if event.delta else 0
+                if delta:
+                    self.canvas.yview_scroll(delta, "units")
     def _on_mousewheel_linux(self, event):
-        if not self.winfo_ismapped():
-            return
-        try:
-            widget = self.winfo_containing(event.x_root, event.y_root)
-        except Exception:
-            widget = None
-        if not (widget and str(widget).startswith(str(self))):
-            return
-
-        bbox = self.canvas.bbox("all")
-        if not bbox:
-            return
-        content_h = bbox[3] - bbox[1]
-        visible_h = self.canvas.winfo_height()
-        if content_h <= visible_h + 1:
-            return
-
-        if event.num == 4:
-            self.canvas.yview_scroll(-1, "units")
-        elif event.num == 5:
-            self.canvas.yview_scroll(1, "units")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if self.winfo_ismapped():
+            try:
+                widget = self.winfo_containing(event.x_root, event.y_root)
+            except Exception:
+                widget = None
+            if widget and str(widget).startswith(str(self)):
+                if event.num == 4:
+                    self.canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    self.canvas.yview_scroll(1, "units")
 
 class RichTextEditor(tk.Toplevel):
     def __init__(self, parent, item: TextItem, on_save):
@@ -724,51 +599,10 @@ class FigureBoardApp:
         self.status_var = tk.StringVar(value="Ready")
         self.zoom_var = tk.StringVar(value="100%")
         self.font_families = list_font_families()
-        # self._build_ui()
-        # self._bind_events()
-        # self._setup_traces()
-        # self.redraw()
-
-
         self._build_ui()
         self._bind_events()
         self._setup_traces()
         self.redraw()
-
-        # self._right_top_job = None
-        # self.root.bind("<Configure>", self._on_root_configure, add="+")
-        # self.root.after(100, self._force_right_panel_top)
-        # self.root.after(300, self._force_right_panel_top)
-
-
-    # def _on_root_configure(self, event=None):
-    #     if self._right_top_job is not None:
-    #         try:
-    #             self.root.after_cancel(self._right_top_job)
-    #         except Exception:
-    #             pass
-    #     self._right_top_job = self.root.after(80, self._force_right_panel_top)
-    # def _on_root_configure(self, event=None):
-    #     self.root.after(10, self._force_right_panel_top)
-    #     self.root.after(50, self._force_right_panel_top)
-    #     self.root.after(120, self._force_right_panel_top)
-
-        
-
-    # def _force_right_panel_top(self):
-    #     try:
-    #         self.right_scroll.update_idletasks()
-    #         self.right_scroll.canvas.update_idletasks()
-    #         self.right_scroll.canvas.configure(scrollregion=self.right_scroll.canvas.bbox("all"))
-    #         self.right_scroll.canvas.yview_moveto(0)
-    #     except Exception:
-    #         pass
-
-            
-
-   
-
-
     def apply_default_label_font_family(self):
         family = self.default_font_family.get()
         for item in self.items:
@@ -808,13 +642,98 @@ class FigureBoardApp:
         self.right_scroll.pack(fill="both", expand=True)
         right = self.right_scroll.inner
     
-        import_box = tk.LabelFrame(left, text="Import",  bg="white", fg="green", bd=1, font = ("Cascadia Code", 12, "bold"))
+        import_box = ttk.LabelFrame(left, text="Import")
         import_box.pack(fill="x", pady=(0, 8))
         ttk.Button(import_box, text="Add image/PDF files 📁", command=self.add_files).pack(fill="x", padx=6, pady=4)
         ttk.Button(import_box, text="Paste from clipboard 📋", command=self.paste_from_clipboard).pack(fill="x", padx=6, pady=4)
-        
-        
-        canvas_box = tk.LabelFrame(left, text="Canvas 🖌️", bg="white", fg="darkorange", bd=1, font = ("Cascadia Code", 12, "bold"))
+        ttk.Button(import_box, text="Add text box 📝", command=self.add_text_box).pack(fill="x", padx=6, pady=4)
+        ttk.Button(import_box, text="Add caption box  ", command=lambda: self.add_text_box(default_text="Caption")).pack(fill="x", padx=6, pady=4)
+        ttk.Button(import_box, text="Add auto caption below panels", command=self.add_caption_below_last_figure).pack(fill="x", padx=6, pady=4)
+        ttk.Button(import_box, text="Add rectangle 🔲", command=lambda: self.add_shape("rectangle")).pack(fill="x", padx=6, pady=2)
+        ttk.Button(import_box, text="Add circle ⭕", command=lambda: self.add_shape("circle")).pack(fill="x", padx=6, pady=2)
+        ttk.Button(import_box, text="Add line ✏️", command=lambda: self.add_shape("line")).pack(fill="x", padx=6, pady=2)
+        ttk.Button(import_box, text="Add arrow 🏹", command=lambda: self.add_shape("arrow")).pack(fill="x", padx=6, pady=2)
+
+        arrange_box = ttk.LabelFrame(left, text="Arrange")
+        arrange_box.pack(fill="x", pady=(0, 8))
+        grid_row = ttk.Frame(arrange_box)
+        grid_row.pack(fill="x", padx=6, pady=(4, 2))
+        ttk.Label(grid_row, text="Rows").pack(side="left")
+        self.grid_rows_entry = ttk.Entry(grid_row, width=6)
+        self.grid_rows_entry.insert(0, "2")
+        self.grid_rows_entry.pack(side="left", padx=(4, 12))
+        ttk.Label(grid_row, text="Cols").pack(side="left")
+        self.grid_cols_entry = ttk.Entry(grid_row, width=6)
+        self.grid_cols_entry.insert(0, "2")
+        self.grid_cols_entry.pack(side="left", padx=4)
+        ttk.Button(arrange_box, text="Apply custom grid 🛠️", command=self.apply_custom_grid).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Auto grid 🤖", command=self.auto_grid).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Distribute horizontally ↔️", command=self.distribute_h).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Distribute vertically ↕️", command=self.distribute_v).pack(fill="x", padx=6, pady=4)
+        align_frame = ttk.Frame(arrange_box)
+        align_frame.pack(fill="x", padx=6, pady=4)
+        ttk.Button(align_frame, text="⬅️", width=3, command=lambda: self.align_to_anchor("left")).pack(side="left", padx=1)
+        ttk.Button(align_frame, text="⬆️", width=3, command=lambda: self.align_to_anchor("top")).pack(side="left", padx=1)
+        ttk.Button(align_frame, text="⬇️", width=3, command=lambda: self.align_to_anchor("bottom")).pack(side="left", padx=1)
+        ttk.Button(align_frame, text="➡️", width=3, command=lambda: self.align_to_anchor("right")).pack(side="left", padx=1)
+        ttk.Button(align_frame, text="↔️", width=3, command=lambda: self.align_to_anchor("hcenter")).pack(side="left", padx=1)
+        ttk.Button(align_frame, text="↕️", width=3, command=lambda: self.align_to_anchor("vcenter")).pack(side="left", padx=1)
+        ttk.Button(arrange_box, text="Same widths 📏", command=self.same_widths).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Same heights 📐", command=self.same_heights).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Tight crop to content ✂️", command=self.crop_canvas_to_content).pack(fill="x", padx=6, pady=4)
+        ttk.Button(arrange_box, text="Resolve overlaps 🔄", command=self.resolve_all_overlaps).pack(fill="x", padx=6, pady=4)
+
+        group_box = ttk.LabelFrame(left, text="Selection and groups")
+        group_box.pack(fill="x", pady=(0, 8))
+        ttk.Button(group_box, text="Select all", command=self.select_all_items).pack(fill="x", padx=6, pady=4)
+        ttk.Button(group_box, text="Group selected", command=self.group_selected).pack(fill="x", padx=6, pady=4)
+        ttk.Button(group_box, text="Ungroup selected", command=self.ungroup_selected).pack(fill="x", padx=6, pady=4)
+        ttk.Button(group_box, text="Duplicate selected", command=self.duplicate_selected).pack(fill="x", padx=6, pady=4)
+        ttk.Button(group_box, text="Delete selected", command=self.delete_selected).pack(fill="x", padx=6, pady=4)
+
+        edit_box = ttk.LabelFrame(left, text="Edit")
+        edit_box.pack(fill="x", pady=(0, 8))
+        ttk.Button(edit_box, text="Undo", command=self.undo).pack(fill="x", padx=6, pady=4)
+        ttk.Button(edit_box, text="Redo", command=self.redo).pack(fill="x", padx=6, pady=4)
+        self.erase_btn = tk.Button(edit_box, text="Toggle erase rectangle mode", command=self.toggle_erase_mode)
+        self.erase_btn.pack(fill="x", padx=6, pady=4)
+        ttk.Button(edit_box, text="Open rich text editor", command=self.open_rich_text_editor).pack(fill="x", padx=6, pady=4)
+
+        label_box = ttk.LabelFrame(left, text="Labels")
+        label_box.pack(fill="x", pady=(0, 8))
+        ttk.Button(label_box, text="Regenerate A, B, C... 🔖", command=self.regenerate_labels).pack(fill="x", padx=6, pady=4)
+        ttk.Button(label_box, text="Toggle labels on/off 🏷️", command=self.toggle_labels).pack(fill="x", padx=6, pady=4)
+        ttk.Label(label_box, text="Default label size").pack(anchor="w", padx=6, pady=(6, 2))
+        ttk.Spinbox(label_box, from_=8, to=120, textvariable=self.default_label_size, width=8,
+                    command=self.apply_default_label_size).pack(anchor="w", padx=6, pady=(0, 6))
+        ttk.Label(label_box, text="Default font family").pack(anchor="w", padx=6, pady=(2, 2))
+        #ttk.Combobox(label_box, values=self.font_families, textvariable=self.default_font_family, state="readonly").pack(fill="x", padx=6, pady=(0, 6))
+        label_font_combo = ttk.Combobox(label_box, values=self.font_families, textvariable=self.default_font_family, state="readonly")
+        label_font_combo.pack(fill="x", padx=6, pady=(0, 6))
+        label_font_combo.bind("<<ComboboxSelected>>", lambda e: self.apply_default_label_font_family())
+        ttk.Checkbutton(label_box, text="Keep labels by add order", variable=self.keep_label_order).pack(anchor="w", padx=6, pady=4)
+
+        auto_label_frame = ttk.Frame(label_box)
+        auto_label_frame.pack(fill="x", padx=6, pady=4)
+        ttk.Label(auto_label_frame, text="Auto position labels").pack(anchor="w")
+        self.label_pos_var = tk.StringVar(value="top-in")
+        pos_combo = ttk.Combobox(auto_label_frame, values=[
+            "top-in", "top-out",
+            "left-in", "left-out",
+            "bottom-in", "bottom-out",
+            "center"
+        ], textvariable=self.label_pos_var, state="readonly", width=18)
+        pos_combo.pack(side="left", padx=(0, 8))
+        ttk.Button(auto_label_frame, text="Apply to all", command=self.apply_auto_label_position_all).pack(side="left")
+        ttk.Button(auto_label_frame, text="Apply to selected", command=self.apply_auto_label_position_selected).pack(side="left", padx=(4, 0))
+
+        ttk.Label(label_box, text="Default label offset X").pack(anchor="w", padx=6, pady=(6, 2))
+        ttk.Spinbox(label_box, from_=-200, to=500, textvariable=self.default_label_offset_x, width=8).pack(anchor="w", padx=6, pady=(0, 4))
+        ttk.Label(label_box, text="Default label offset Y").pack(anchor="w", padx=6, pady=(2, 2))
+        ttk.Spinbox(label_box, from_=-200, to=500, textvariable=self.default_label_offset_y, width=8).pack(anchor="w", padx=6, pady=(0, 6))
+        ttk.Button(label_box, text="Apply offsets to all panels", command=self.apply_default_label_offsets).pack(fill="x", padx=6, pady=4)
+
+        canvas_box = ttk.LabelFrame(left, text="Canvas 🖌️")
         canvas_box.pack(fill="x", pady=(0, 8))
         row = ttk.Frame(canvas_box)
         row.pack(fill="x", padx=6, pady=4)
@@ -829,153 +748,25 @@ class FigureBoardApp:
         self.canvas_h_entry.insert(0, str(self.canvas_h))
         self.canvas_h_entry.pack(side="left", padx=4)
         ttk.Button(canvas_box, text="Apply canvas size", command=self.apply_canvas_size).pack(fill="x", padx=6, pady=4)
-       
+        ttk.Label(canvas_box, text="Outer margin").pack(anchor="w", padx=6, pady=(6, 2))
+        ttk.Spinbox(canvas_box, from_=-500, to=1000, textvariable=self.outer_margin, width=8, command=self.redraw).pack(anchor="w", padx=6, pady=(0, 6))
+        ttk.Label(canvas_box, text="Gap X").pack(anchor="w", padx=6, pady=(2, 2))
+        ttk.Spinbox(canvas_box, from_=-100, to=1000, textvariable=self.gap_x, width=8, command=self.on_gap_change).pack(anchor="w", padx=6, pady=(0, 6))
+        ttk.Label(canvas_box, text="Gap Y").pack(anchor="w", padx=6, pady=(2, 2))
+        ttk.Spinbox(canvas_box, from_=-100, to=1000, textvariable=self.gap_y, width=8, command=self.on_gap_change).pack(anchor="w", padx=6, pady=(0, 6))
+        ttk.Checkbutton(canvas_box, text="Show grid", variable=self.show_grid, command=self.redraw).pack(anchor="w", padx=6, pady=4)
 
+        zoom_box = ttk.LabelFrame(left, text="Zoom 🔍")
+        zoom_box.pack(fill="x", pady=(0, 8))
+        zrow = ttk.Frame(zoom_box)
+        zrow.pack(fill="x", padx=6, pady=4)
+        ttk.Button(zrow, text="Zoom out 🔍➖", command=lambda: self.zoom_by(1 / ZOOM_STEP)).pack(side="left", fill="x", expand=True, padx=(0, 4))
+        ttk.Button(zrow, text="Zoom in 🔍➕", command=lambda: self.zoom_by(ZOOM_STEP)).pack(side="left", fill="x", expand=True, padx=(4, 0))
+        ttk.Button(zoom_box, text="Reset zoom 🔄", command=self.reset_zoom).pack(fill="x", padx=6, pady=4)
+        ttk.Label(zoom_box, textvariable=self.zoom_var).pack(anchor="w", padx=6, pady=(0, 6))
 
-
-        settings_row1 = ttk.Frame(canvas_box)
-        settings_row1.pack(fill="x", padx=6, pady=(6, 4))
-
-
-
-        
-
-        ttk.Label(settings_row1, text="Margin").pack(side="left")
-        ttk.Spinbox(
-            settings_row1,
-            from_=-500, to=1000,
-            textvariable=self.outer_margin,
-            width=6,
-            command=self.redraw
-        ).pack(side="left", padx=(2, 10))
-
-        ttk.Label(settings_row1, text="Gap X (px)").pack(side="left")
-        ttk.Spinbox(
-            settings_row1,
-            from_=-100, to=1000,
-            textvariable=self.gap_x,
-            width=6,
-            command=self.on_gap_change
-        ).pack(side="left", padx=(2, 10))
-
-        ttk.Label(settings_row1, text="Gap Y (px)").pack(side="left")
-        ttk.Spinbox(
-            settings_row1,
-            from_=-100, to=1000,
-            textvariable=self.gap_y,
-            width=6,
-            command=self.on_gap_change
-        ).pack(side="left", padx=(2, 0))
-
-        settings_row2 = ttk.Frame(canvas_box)
-        settings_row2.pack(fill="x", padx=6, pady=(0, 6))
-
-        ttk.Checkbutton(
-            settings_row2,
-            text="Show grid",
-            variable=self.show_grid,
-            command=self.redraw
-        ).pack(side="left")
-
-
-
-
-
-        arrange_box = tk.LabelFrame(left, text="Arrange", bg="white", fg="blue", bd=1, font = ("Cascadia Code", 12, "bold"))
-        arrange_box.pack(fill="x", pady=(0, 8))
-        grid_row = ttk.Frame(arrange_box)
-        grid_row.pack(fill="x", padx=6, pady=(4, 2))
-        ttk.Label(grid_row, text="Rows").pack(side="left")
-        self.grid_rows_entry = ttk.Entry(grid_row, width=6)
-        self.grid_rows_entry.insert(0, "2")
-        self.grid_rows_entry.pack(side="left", padx=(4, 12))
-        ttk.Label(grid_row, text="Cols").pack(side="left")
-        self.grid_cols_entry = ttk.Entry(grid_row, width=6)
-        self.grid_cols_entry.insert(0, "2")
-        self.grid_cols_entry.pack(side="left", padx=4)
-        ttk.Button(arrange_box, text="Custom grid ⚙️ ( first adjust Gap X&Y ⬆️ )", command=self.apply_custom_grid).pack(fill="x", padx=6, pady=4)
-        ttk.Button(arrange_box, text="Auto grid 🤖", command=self.auto_grid).pack(fill="x", padx=6, pady=4)
-        ttk.Button(arrange_box, text="Distribute horizontally ↔️", command=self.distribute_h).pack(fill="x", padx=6, pady=4)
-        ttk.Button(arrange_box, text="Distribute vertically ↕️", command=self.distribute_v).pack(fill="x", padx=6, pady=4)
-        # align_frame = ttk.Frame(arrange_box)
-        # align_frame.pack(fill="x", padx=6, pady=4)
-        # ttk.Button(align_frame, text="⬅️", width=3, command=lambda: self.align_to_anchor("left")).pack(side="left", padx=1)
-        # ttk.Button(align_frame, text="⬆️", width=3, command=lambda: self.align_to_anchor("top")).pack(side="left", padx=1)
-        # ttk.Button(align_frame, text="⬇️", width=3, command=lambda: self.align_to_anchor("bottom")).pack(side="left", padx=1)
-        # ttk.Button(align_frame, text="➡️", width=3, command=lambda: self.align_to_anchor("right")).pack(side="left", padx=1)
-        # ttk.Button(align_frame, text="↔️", width=3, command=lambda: self.align_to_anchor("hcenter")).pack(side="left", padx=1)
-        # ttk.Button(align_frame, text="↕️", width=3, command=lambda: self.align_to_anchor("vcenter")).pack(side="left", padx=1)
-
-        ttk.Label(arrange_box, text="Align to anchor").pack(anchor="w", padx=6, pady=(6, 2))
-
-        align_frame = ttk.Frame(arrange_box)
-        align_frame.pack(fill="x", padx=6, pady=(0, 4))
-
-        ttk.Button(align_frame, text="⬅️", width=3, command=lambda: self.align_to_anchor("left")).pack(side="left", padx=1)
-        ttk.Button(align_frame, text="⬆️", width=3, command=lambda: self.align_to_anchor("top")).pack(side="left", padx=1)
-        ttk.Button(align_frame, text="⬇️", width=3, command=lambda: self.align_to_anchor("bottom")).pack(side="left", padx=1)
-        ttk.Button(align_frame, text="➡️", width=3, command=lambda: self.align_to_anchor("right")).pack(side="left", padx=1)
-        ttk.Button(align_frame, text="↔️", width=3, command=lambda: self.align_to_anchor("hcenter")).pack(side="left", padx=1)
-        ttk.Button(align_frame, text="↕️", width=3, command=lambda: self.align_to_anchor("vcenter")).pack(side="left", padx=1)
-
-
-
-
-
-
-        ttk.Button(arrange_box, text="Same widths 📏", command=self.same_widths).pack(fill="x", padx=6, pady=4)
-        ttk.Button(arrange_box, text="Same heights 📐", command=self.same_heights).pack(fill="x", padx=6, pady=4)
-        
-        ttk.Button(arrange_box, text="Resolve overlaps 🔄", command=self.resolve_all_overlaps).pack(fill="x", padx=6, pady=4)
-
-        group_box = tk.LabelFrame(left, text="Selection and groups", bg="white", fg="violet", bd=1, font = ("Cascadia Code", 12, "bold"))
-        group_box.pack(fill="x", pady=(0, 8))
-        ttk.Button(group_box, text="Select all", command=self.select_all_items).pack(fill="x", padx=6, pady=4)
-        ttk.Button(group_box, text="Group selected", command=self.group_selected).pack(fill="x", padx=6, pady=4)
-        ttk.Button(group_box, text="Ungroup selected", command=self.ungroup_selected).pack(fill="x", padx=6, pady=4)
-        ttk.Button(group_box, text="Duplicate selected", command=self.duplicate_selected).pack(fill="x", padx=6, pady=4)
-        ttk.Button(group_box, text="Delete selected", command=self.delete_selected).pack(fill="x", padx=6, pady=4)
-
-        
-        edit_box = tk.LabelFrame(
-            left,
-            text="Edit",
-            bg="white",
-            fg="purple",
-            bd=1,
-            font = ("Cascadia Code", 12, "bold")
-        )
-        edit_box.pack(fill="x", pady=(0, 8))
-        ttk.Button(edit_box, text="Undo", command=self.undo).pack(fill="x", padx=6, pady=4)
-        ttk.Button(edit_box, text="Redo", command=self.redo).pack(fill="x", padx=6, pady=4)
-        ttk.Button(edit_box, text="Pick colour", command=self.pick_selected_text_colour).pack(fill="x", padx=6, pady=4)
-        ttk.Button(edit_box, text="Add text box 📝", command=self.add_text_box).pack(fill="x", padx=6, pady=4)
-        ttk.Button(edit_box, text="Add caption box  ", command=lambda: self.add_text_box(default_text="Caption")).pack(fill="x", padx=6, pady=4)
-        ttk.Button(edit_box, text="Add auto caption below panels", command=self.add_caption_below_last_figure).pack(fill="x", padx=6, pady=4)
-        self.erase_btn = tk.Button(edit_box, text="Toggle erase rectangle mode", command=self.toggle_erase_mode)
-        ttk.Button(edit_box, text="Tight crop to content ✂️", command=self.crop_canvas_to_content).pack(fill="x", padx=6, pady=4)
-        self.erase_btn.pack(fill="x", padx=6, pady=4)
-        #ttk.Button(edit_box, text="Open rich text editor", command=self.open_rich_text_editor).pack(fill="x", padx=6, pady=4) # removing redundant button
-
-            
-
-        # export_box = ttk.LabelFrame(left, text="Project and export 🎛️", bg="white", fg="black", bd=1, highlightthickness=1, highlightbackground="#888", highlightcolor="#888")
-        # export_box.pack(fill="x", pady=(0, 8))
-
-        export_box = tk.LabelFrame(
-            left,
-            text="Project and export 🎛️",
-            bg="white",
-            fg="red",
-            bd=1,
-            font = ("Cascadia Code", 12, "bold")
-      
-        )
+        export_box = ttk.LabelFrame(left, text="Project and export 🎛️")
         export_box.pack(fill="x", pady=(0, 8))
-
-
-
-
         ttk.Button(export_box, text="Save project 💾", command=self.save_project).pack(fill="x", padx=6, pady=4)
         ttk.Button(export_box, text="Open project 📂", command=self.open_project).pack(fill="x", padx=6, pady=4)
         ttk.Checkbutton(export_box, text="Trim whitespace on export ✂️", variable=self.auto_trim_on_export).pack(anchor="w", padx=6, pady=4)
@@ -1012,7 +803,7 @@ class FigureBoardApp:
             except Exception:
                 pass
 
-        prop_box = tk.LabelFrame(right, text="Selected item info (beta)", bg="white", fg="darkgreen", bd=1, font = ("Cascadia Code", 12, "bold"))
+        prop_box = ttk.LabelFrame(right, text="Selected item")
         prop_box.pack(fill="x", pady=(0, 8))
         self.sel_type_var = tk.StringVar(value="-")
         self.sel_label_var = tk.StringVar(value="")
@@ -1035,150 +826,69 @@ class FigureBoardApp:
         ttk.Entry(prop_box, textvariable=self.sel_label_var).grid(row=1, column=1, sticky="ew", padx=6, pady=4)
         ttk.Label(prop_box, text="Text").grid(row=2, column=0, sticky="w", padx=6, pady=4)
         ttk.Entry(prop_box, textvariable=self.sel_text_var).grid(row=2, column=1, sticky="ew", padx=6, pady=4)
-        
-        # ttk.Label(prop_box, text="X").grid(row=3, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_x_var, width=10).grid(row=3, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Label(prop_box, text="Y").grid(row=4, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_y_var, width=10).grid(row=4, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Label(prop_box, text="W").grid(row=5, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_w_var, width=10).grid(row=5, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Label(prop_box, text="H").grid(row=6, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_h_var, width=10).grid(row=6, column=1, sticky="w", padx=6, pady=4)
-
-        geom_row = ttk.Frame(prop_box)
-        geom_row.grid(row=3, column=0, columnspan=2, sticky="ew", padx=6, pady=4)
-
-        ttk.Label(geom_row, text="X").pack(side="left")
-        ttk.Entry(geom_row, textvariable=self.sel_x_var, width=6).pack(side="left", padx=(2, 8))
-
-        ttk.Label(geom_row, text="Y").pack(side="left")
-        ttk.Entry(geom_row, textvariable=self.sel_y_var, width=6).pack(side="left", padx=(2, 8))
-
-        ttk.Label(geom_row, text="W").pack(side="left")
-        ttk.Entry(geom_row, textvariable=self.sel_w_var, width=6).pack(side="left", padx=(2, 8))
-
-        ttk.Label(geom_row, text="H").pack(side="left")
-        ttk.Entry(geom_row, textvariable=self.sel_h_var, width=6).pack(side="left", padx=(2, 0))
-        
-       
-        # ttk.Label(prop_box, text="Font size").grid(row=7, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_font_var, width=10).grid(row=7, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Label(prop_box, text="Font family").grid(row=8, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Combobox(prop_box, values=self.font_families, textvariable=self.sel_font_family_var, state="readonly").grid(row=8, column=1, sticky="ew", padx=6, pady=4)
-        ttk.Label(prop_box, text="Align (Text only)").grid(row=9, column=0, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="X").grid(row=3, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_x_var, width=10).grid(row=3, column=1, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="Y").grid(row=4, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_y_var, width=10).grid(row=4, column=1, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="W").grid(row=5, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_w_var, width=10).grid(row=5, column=1, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="H").grid(row=6, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_h_var, width=10).grid(row=6, column=1, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="Font size").grid(row=7, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_font_var, width=10).grid(row=7, column=1, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="Font family").grid(row=8, column=0, sticky="w", padx=6, pady=4)
+        ttk.Combobox(prop_box, values=self.font_families, textvariable=self.sel_font_family_var, state="readonly").grid(row=8, column=1, sticky="ew", padx=6, pady=4)
+        ttk.Label(prop_box, text="Align").grid(row=9, column=0, sticky="w", padx=6, pady=4)
         ttk.Combobox(prop_box, values=["left", "center", "right", "justify"], textvariable=self.sel_align_var, state="readonly").grid(row=9, column=1, sticky="ew", padx=6, pady=4)
-        ttk.Label(prop_box, text="Rotation (TextBox only)").grid(row=10, column=0, sticky="w", padx=6, pady=4)
+        ttk.Label(prop_box, text="Rotation").grid(row=10, column=0, sticky="w", padx=6, pady=4)
         ttk.Combobox(prop_box, values=["0", "90", "180", "270"], textvariable=self.sel_rotation_var, state="readonly").grid(row=10, column=1, sticky="ew", padx=6, pady=4)
-        # ttk.Label(prop_box, text="Line spacing").grid(row=11, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Entry(prop_box, textvariable=self.sel_line_spacing_var, width=10).grid(row=11, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Checkbutton(prop_box, text="Bold", variable=self.sel_bold_var).grid(row=12, column=0, sticky="w", padx=6, pady=4)
-        # ttk.Checkbutton(prop_box, text="Italic", variable=self.sel_italic_var).grid(row=12, column=1, sticky="w", padx=6, pady=4)
-        # ttk.Checkbutton(prop_box, text="Show panel label", variable=self.sel_show_label_var).grid(
-        #     row=13, column=0, columnspan=2, sticky="w", padx=6, pady=4
-        # )
-        # ttk.Button(prop_box, text="Apply changes", command=self.apply_selected_properties).grid(
-        #     row=14, column=0, columnspan=2, sticky="ew", padx=6, pady=6
-        #  )
-        
-        ttk.Button(prop_box, text="Apply changes", command=self.apply_selected_properties).grid(
-            row=11, column=0, columnspan=2, sticky="ew", padx=6, pady=6
+        ttk.Label(prop_box, text="Line spacing").grid(row=11, column=0, sticky="w", padx=6, pady=4)
+        ttk.Entry(prop_box, textvariable=self.sel_line_spacing_var, width=10).grid(row=11, column=1, sticky="w", padx=6, pady=4)
+        ttk.Checkbutton(prop_box, text="Bold", variable=self.sel_bold_var).grid(row=12, column=0, sticky="w", padx=6, pady=4)
+        ttk.Checkbutton(prop_box, text="Italic", variable=self.sel_italic_var).grid(row=12, column=1, sticky="w", padx=6, pady=4)
+        ttk.Checkbutton(prop_box, text="Show panel label", variable=self.sel_show_label_var).grid(
+            row=13, column=0, columnspan=2, sticky="w", padx=6, pady=4
         )
-        # ttk.Button(prop_box, text="Rich text editor", command=self.open_rich_text_editor).grid(
-        #     row=15, column=0, columnspan=2, sticky="ew", padx=6, pady=4
-        # )
-        # ttk.Button(prop_box, text="Bring to front", command=self.bring_to_front).grid(
-        #     row=16, column=0, columnspan=2, sticky="ew", padx=6, pady=4
-        # )
-        # ttk.Button(prop_box, text="Send to back", command=self.send_to_back).grid(
-        #     row=17, column=0, columnspan=2, sticky="ew", padx=6, pady=4
-        # )
-        # ttk.Button(prop_box, text="Pick colour", command=self.pick_selected_text_colour).grid(
-        #     row=18, column=0, columnspan=2, sticky="ew", padx=6, pady=4
-        # )
+        ttk.Button(prop_box, text="Apply changes", command=self.apply_selected_properties).grid(
+            row=14, column=0, columnspan=2, sticky="ew", padx=6, pady=6
+        )
+        ttk.Button(prop_box, text="Rich text editor", command=self.open_rich_text_editor).grid(
+            row=15, column=0, columnspan=2, sticky="ew", padx=6, pady=4
+        )
+        ttk.Button(prop_box, text="Bring to front", command=self.bring_to_front).grid(
+            row=16, column=0, columnspan=2, sticky="ew", padx=6, pady=4
+        )
+        ttk.Button(prop_box, text="Send to back", command=self.send_to_back).grid(
+            row=17, column=0, columnspan=2, sticky="ew", padx=6, pady=4
+        )
+        ttk.Button(prop_box, text="Pick colour", command=self.pick_selected_text_colour).grid(
+            row=18, column=0, columnspan=2, sticky="ew", padx=6, pady=4
+        )
         prop_box.columnconfigure(1, weight=1)
 
-
-        label_box = ttk.LabelFrame(right, text="Labels")
-        label_box = tk.LabelFrame(
-            right,
-            text="Labels",
-            bg="white",
-            fg="saddle brown",
-            bd=1,
-            font = ("Cascadia Code", 12, "bold")
+        help_box = ttk.LabelFrame(right, text="Shortcuts")
+        help_box.pack(fill="x", pady=(0, 8))
+        help_text = (
+            "Ctrl+A select all\n"
+            "Ctrl+Z undo\n"
+            "Ctrl+Y redo\n"
+            "Ctrl+Click multi-select\n"
+            "Delete remove selected\n"
+            "Ctrl+V paste image\n"
+            "Ctrl+O open files\n"
+            "Ctrl+S save project\n"
+            "Ctrl+Shift+S export PNG\n"
+            "Ctrl+G auto grid\n"
+            "Ctrl+Mouse wheel zoom\n"
+            "Mouse wheel scroll\n"
+            "Shift+wheel horizontal scroll\n"
+            "Double click text rich editor\n"
+            "Drag panel label move label manually\n"
+            "Right click context menu\n"
+            "Drag empty area = rectangle select\n"
+            "Arrow keys move selected (with Ctrl/Shift = faster)"
         )
-        label_box.pack(fill="x", pady=(0, 8))
-        ttk.Button(label_box, text="Regenerate A, B, C... 🔖", command=self.regenerate_labels).pack(fill="x", padx=6, pady=4)
-        ttk.Button(label_box, text="Toggle labels on/off 🏷️", command=self.toggle_labels).pack(fill="x", padx=6, pady=4)
-        ttk.Label(label_box, text="Default label size").pack(anchor="w", padx=6, pady=(6, 2))
-        ttk.Spinbox(label_box, from_=8, to=120, textvariable=self.default_label_size, width=8,
-                    command=self.apply_default_label_size).pack(anchor="w", padx=6, pady=(0, 6))
-        ttk.Label(label_box, text="Default font family").pack(anchor="w", padx=6, pady=(2, 2))
-        #ttk.Combobox(label_box, values=self.font_families, textvariable=self.default_font_family, state="readonly").pack(fill="x", padx=6, pady=(0, 6))
-        label_font_combo = ttk.Combobox(label_box, values=self.font_families, textvariable=self.default_font_family, state="readonly")
-        label_font_combo.pack(fill="x", padx=6, pady=(0, 6))
-        label_font_combo.bind("<<ComboboxSelected>>", lambda e: self.apply_default_label_font_family())
-        ttk.Checkbutton(label_box, text="Keep labels by add order", variable=self.keep_label_order).pack(anchor="w", padx=6, pady=4)
-
-        auto_label_frame = ttk.Frame(label_box)
-        auto_label_frame.pack(fill="x", padx=6, pady=4)
-        ttk.Label(auto_label_frame, text="Auto position labels").pack(anchor="w")
-        self.label_pos_var = tk.StringVar(value="top-in")
-        pos_combo = ttk.Combobox(auto_label_frame, values=[
-            "top-in", "top-out",
-            "left-in", "left-out",
-            "bottom-in", "bottom-out",
-            "center"
-        ], textvariable=self.label_pos_var, state="readonly", width=18)
-        pos_combo.pack(side="left", padx=(0, 8))
-        ttk.Button(auto_label_frame, text="Apply to all", command=self.apply_auto_label_position_all).pack(side="left")
-        ttk.Button(auto_label_frame, text="Apply to selected", command=self.apply_auto_label_position_selected).pack(side="left", padx=(4, 0))
-
-        ttk.Label(label_box, text="Default label offset X").pack(anchor="w", padx=6, pady=(6, 2))
-        ttk.Spinbox(label_box, from_=-200, to=500, textvariable=self.default_label_offset_x, width=8).pack(anchor="w", padx=6, pady=(0, 4))
-        ttk.Label(label_box, text="Default label offset Y").pack(anchor="w", padx=6, pady=(2, 2))
-        ttk.Spinbox(label_box, from_=-200, to=500, textvariable=self.default_label_offset_y, width=8).pack(anchor="w", padx=6, pady=(0, 6))
-        # ttk.Button(label_box, text="Apply offsets to all panels", command=self.apply_default_label_offsets).pack(fill="x", padx=6, pady=4)
-#### 🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️🏗️ fixing the customized offset problem 
-        ttk.Button(label_box, text="Apply offsets to all panels", command=self.apply_default_label_offsets).pack(fill="x", padx=6, pady=2)
-        ttk.Button(label_box, text="Apply offsets to selected panels", command=self.apply_default_label_offsets_selected).pack(fill="x", padx=6, pady=2)
-
-        shapes_box = tk.LabelFrame(right, text="Shapes (beta)", bg="white", fg="black", bd=1, font = ("Cascadia Code", 12, "bold"))
-        shapes_box.pack(fill="x", pady=(0, 8))
-
-        ttk.Button(shapes_box, text="Add rectangle 🔲", command=lambda: self.add_shape("rectangle")).pack(fill="x", padx=6, pady=2)
-        ttk.Button(shapes_box, text="Add circle ⭕", command=lambda: self.add_shape("circle")).pack(fill="x", padx=6, pady=2)
-        ttk.Button(shapes_box, text="Add line ✏️", command=lambda: self.add_shape("line")).pack(fill="x", padx=6, pady=2)
-        ttk.Button(shapes_box, text="Add arrow 🏹", command=lambda: self.add_shape("arrow")).pack(fill="x", padx=6, pady=2)
-
-        zoom_box = tk.LabelFrame(right, text="Zoom 🔍", bg="white", fg="dodger blue", bd=1, font = ("Cascadia Code", 12, "bold"))
-        zoom_box.pack(fill="x", pady=(0, 8))
-
-        zrow = ttk.Frame(zoom_box)
-        zrow.pack(fill="x", padx=6, pady=4)
-
-        ttk.Button(
-            zrow,
-            text="Zoom out 🔍➖",
-            command=lambda: self.zoom_by(1 / ZOOM_STEP)
-        ).pack(side="left", fill="x", expand=True, padx=(0, 4))
-
-        ttk.Button(
-            zrow,
-            text="Zoom in 🔍➕",
-            command=lambda: self.zoom_by(ZOOM_STEP)
-        ).pack(side="left", fill="x", expand=True, padx=(4, 0))
-
-        ttk.Button(zoom_box, text="Reset zoom 🔄", command=self.reset_zoom).pack(fill="x", padx=6, pady=4)
-        ttk.Label(zoom_box, textvariable=self.zoom_var).pack(anchor="w", padx=6, pady=(0, 6))
-
-
-
-
-        
-
-
-
+        ttk.Label(help_box, text=help_text, justify="left").pack(anchor="w", padx=8, pady=8)
 
         self.bottom_frame = ttk.Frame(self.root)
         self.bottom_frame.pack(fill="x", side="bottom", padx=4, pady=(0, 4))
@@ -1196,12 +906,6 @@ class FigureBoardApp:
         )
         self._build_context_menu()
         self.update_erase_button_style()
-
-
-
-
-
-
 
     def _setup_traces(self):
         self.gap_x.trace_add("write", lambda *args: self.redraw())
@@ -2051,7 +1755,7 @@ class FigureBoardApp:
 
     def _draw_selection(self, item: CanvasItem, is_anchor=False):
         x1, y1, x2, y2 = item.bbox()
-        outline = "#ff7a00" if is_anchor else "#2a73ff" ### note to self: remember to select better colours later 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+        outline = "#ff7a00" if is_anchor else "#2a73ff"
         self.canvas.create_rectangle(self.sx(x1), self.sy(y1), self.sx(x2), self.sy(y2), outline=outline, width=2, dash=(5, 3))
         hs = HANDLE_SIZE
         self.canvas.create_rectangle(self.sx(x2) - hs, self.sy(y2) - hs, self.sx(x2), self.sy(y2), fill=outline, outline=outline)
@@ -2727,20 +2431,6 @@ class FigureBoardApp:
                 item.label_offset_y = oy
         self.redraw()
         self.set_status("Applied custom label offsets to all panels")
-    ##### adding correct funtion to apply customized offsets to selected panels 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
-    def apply_default_label_offsets_selected(self):
-        if not self.selected_ids:
-            return
-        self.save_undo_state()
-        ox = self.default_label_offset_x.get()
-        oy = self.default_label_offset_y.get()
-        for item in self.get_selected_items():
-            if isinstance(item, PanelItem):
-                item.label_offset_x = ox
-                item.label_offset_y = oy
-        self.redraw()
-        self.set_status("Applied custom label offsets to selected panels")
-        
 
     def apply_auto_label_position_all(self):
         self.save_undo_state()
