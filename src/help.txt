@@ -1,0 +1,23 @@
+help_box = ttk.LabelFrame(right, text="Shortcuts")
+        help_box.pack(fill="x", pady=(0, 8))
+        help_text = (
+            "Ctrl+A select all\n"
+            "Ctrl+Z undo\n"
+            "Ctrl+Y redo\n"
+            "Ctrl+Click multi-select\n"
+            "Delete remove selected\n"
+            "Ctrl+V paste image\n"
+            "Ctrl+O open files\n"
+            "Ctrl+S save project\n"
+            "Ctrl+Shift+S export PNG\n"
+            "Ctrl+G auto grid\n"
+            "Ctrl+Mouse wheel zoom\n"
+            "Mouse wheel scroll\n"
+            "Shift+wheel horizontal scroll\n"
+            "Double click text rich editor\n"
+            "Drag panel label move label manually\n"
+            "Right click context menu\n"
+            "Drag empty area = rectangle select\n"
+            "Arrow keys move selected (with Ctrl/Shift = faster)"
+        )
+        ttk.Label(help_box, text=help_text, justify="left").pack(anchor="w", padx=8, pady=8)
