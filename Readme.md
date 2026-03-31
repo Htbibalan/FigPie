@@ -80,5 +80,5 @@ add simple manual file
 
 If you use FigPie, please cite:
 
-Taghipourbibalan, H. (2026). FigPie (Version 0.1.2) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19321987
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.3) [Software]. Zenodo.  
+https://doi.org/10.5281/zenodo.19353974
