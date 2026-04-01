@@ -76,6 +76,10 @@ add simple manual file
 
 Open new canvas option
 
+Auto plot placement fails, rewrite the function to handle smart placement based on import order
+
+add hint on keys when mouse hovers 
+
 
 ## Citation
 
