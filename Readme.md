@@ -60,7 +60,7 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
-* Add crop/copy object
+* Add crop/copy object, trim image
 
 * Mac/ Linux support-test improvements
 
@@ -78,6 +78,8 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 * add hint on keys when mouse hovers 
 
+
+
 ~~Auto plot placement fails, rewrite the function to handle smart placement based on import order~~
 
 
@@ -87,5 +89,5 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 If you use FigPie, please cite:
 
-Taghipourbibalan, H. (2026). FigPie (Version 0.1.4) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19370653
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.5) [Software]. Zenodo.  
+https://doi.org/10.5281/zenodo.19375890
