@@ -84,7 +84,7 @@ class SplashScreen:
         self.root.destroy()
 
 APP_TITLE = "FigPie 🍰"
-PROJECT_VERSION = 1.5
+PROJECT_VERSION = 1.4
 DEFAULT_CANVAS_W = 1600
 DEFAULT_CANVAS_H = 1200
 DEFAULT_BG = "white"
@@ -1198,41 +1198,6 @@ class FigureBoardApp:
         self.update_erase_button_style()
 
 
-##### Fixing key bindings problem, shortcuts must work indipendent of where the focus is, except when typing in text inputs. preparing version v0.1.5
-    def _focused_widget_is_text_input(self, event=None):
-        widget = None
-
-        if event is not None:
-            widget = getattr(event, "widget", None)
-
-        if widget is None:
-            try:
-                widget = self.root.focus_get()
-            except Exception:
-                widget = None
-
-        if widget is None:
-            return False
-
-        text_like = (
-            tk.Entry,
-            tk.Text,
-            ttk.Entry,
-            ttk.Combobox,
-            tk.Spinbox,
-            ttk.Spinbox,
-        )
-
-        if isinstance(widget, text_like):
-            return True
-
-        cls = widget.winfo_class()
-        return cls in ("Entry", "Text", "TEntry", "TCombobox", "Spinbox", "TSpinbox")
-
-    def _shortcut_allowed(self, event=None):
-        return not self._focused_widget_is_text_input(event)        
-
-
 
 
 
@@ -1279,36 +1244,52 @@ class FigureBoardApp:
         self.canvas.bind("<Shift-Button-4>", self.on_canvas_mousewheel_linux_horizontal, add="+")
         self.canvas.bind("<Shift-Button-5>", self.on_canvas_mousewheel_linux_horizontal, add="+")
 
-       ############ fixing key bindings problem, shortcuts must work indipendent of where the focus is, except when typing in text inputs. preparing version v0.1.5
-        self.root.bind_all("<Delete>", lambda e: self.delete_selected() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-v>", lambda e: self.paste_from_clipboard() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-o>", lambda e: self.add_files() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-s>", lambda e: self.save_project() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-Shift-s>", lambda e: self.export_image("PNG") if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-g>", lambda e: self.auto_grid() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-a>", lambda e: self.select_all_items() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-z>", lambda e: self.undo() if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-y>", lambda e: self.redo() if self._shortcut_allowed(e) else None)
+        # self.root.bind("<Delete>", lambda e: self.delete_selected())
+        # self.root.bind("<Control-v>", lambda e: self.paste_from_clipboard())
+        # self.root.bind("<Control-o>", lambda e: self.add_files())
+        # self.root.bind("<Control-s>", lambda e: self.save_project())
+        # self.root.bind("<Control-S>", lambda e: self.export_image("PNG"))
+        # self.root.bind("<Control-g>", lambda e: self.auto_grid())
+        # self.root.bind("<Control-a>", lambda e: self.select_all_items())
+        # self.root.bind("<Control-z>", lambda e: self.undo())
+        # self.root.bind("<Control-y>", lambda e: self.redo())
 
-        self.root.bind_all("<Control-plus>", lambda e: self.zoom_by(ZOOM_STEP) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-equal>", lambda e: self.zoom_by(ZOOM_STEP) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-minus>", lambda e: self.zoom_by(1 / ZOOM_STEP) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Control-0>", lambda e: self.reset_zoom() if self._shortcut_allowed(e) else None)
+        # self.root.bind("<Control-plus>", lambda e: self.zoom_by(ZOOM_STEP))
+        # self.root.bind("<Control-equal>", lambda e: self.zoom_by(ZOOM_STEP))
+        # self.root.bind("<Control-minus>", lambda e: self.zoom_by(1 / ZOOM_STEP))
+        # self.root.bind("<Control-0>", lambda e: self.reset_zoom())
 
-        self.root.bind_all("<Left>", lambda e: self.move_selected_with_keyboard(-1, 0) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Right>", lambda e: self.move_selected_with_keyboard(1, 0) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Up>", lambda e: self.move_selected_with_keyboard(0, -1) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Down>", lambda e: self.move_selected_with_keyboard(0, 1) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Shift-Left>", lambda e: self.move_selected_with_keyboard(-10, 0) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Shift-Right>", lambda e: self.move_selected_with_keyboard(10, 0) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Shift-Up>", lambda e: self.move_selected_with_keyboard(0, -10) if self._shortcut_allowed(e) else None)
-        self.root.bind_all("<Shift-Down>", lambda e: self.move_selected_with_keyboard(0, 10) if self._shortcut_allowed(e) else None)
+        # self.root.bind("<Left>", lambda e: self.move_selected_with_keyboard(-1, 0))
+        # self.root.bind("<Right>", lambda e: self.move_selected_with_keyboard(1, 0))
+        # self.root.bind("<Up>", lambda e: self.move_selected_with_keyboard(0, -1))
+        # self.root.bind("<Down>", lambda e: self.move_selected_with_keyboard(0, 1))
+        # self.root.bind("<Shift-Left>", lambda e: self.move_selected_with_keyboard(-10, 0))
+        # self.root.bind("<Shift-Right>", lambda e: self.move_selected_with_keyboard(10, 0))
+        # self.root.bind("<Shift-Up>", lambda e: self.move_selected_with_keyboard(0, -10))
+        # self.root.bind("<Shift-Down>", lambda e: self.move_selected_with_keyboard(0, 10))
+        self.root.bind_all("<Delete>", lambda e: self.delete_selected())
+        self.root.bind_all("<Control-v>", lambda e: self.paste_from_clipboard())
+        self.root.bind_all("<Control-o>", lambda e: self.add_files())
+        self.root.bind_all("<Control-s>", lambda e: self.save_project())
+        self.root.bind_all("<Control-Shift-s>", lambda e: self.export_image("PNG"))
+        self.root.bind_all("<Control-g>", lambda e: self.auto_grid())
+        self.root.bind_all("<Control-a>", lambda e: self.select_all_items())
+        self.root.bind_all("<Control-z>", lambda e: self.undo())
+        self.root.bind_all("<Control-y>", lambda e: self.redo())
 
+        self.root.bind_all("<Control-plus>", lambda e: self.zoom_by(ZOOM_STEP))
+        self.root.bind_all("<Control-equal>", lambda e: self.zoom_by(ZOOM_STEP))
+        self.root.bind_all("<Control-minus>", lambda e: self.zoom_by(1 / ZOOM_STEP))
+        self.root.bind_all("<Control-0>", lambda e: self.reset_zoom())
 
-
-
-
-
+        self.root.bind_all("<Left>", lambda e: self.move_selected_with_keyboard(-1, 0))
+        self.root.bind_all("<Right>", lambda e: self.move_selected_with_keyboard(1, 0))
+        self.root.bind_all("<Up>", lambda e: self.move_selected_with_keyboard(0, -1))
+        self.root.bind_all("<Down>", lambda e: self.move_selected_with_keyboard(0, 1))
+        self.root.bind_all("<Shift-Left>", lambda e: self.move_selected_with_keyboard(-10, 0))
+        self.root.bind_all("<Shift-Right>", lambda e: self.move_selected_with_keyboard(10, 0))
+        self.root.bind_all("<Shift-Up>", lambda e: self.move_selected_with_keyboard(0, -10))
+        self.root.bind_all("<Shift-Down>", lambda e: self.move_selected_with_keyboard(0, 10))
 
     def open_hyperlink(self, url: str):
         try:
