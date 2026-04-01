@@ -60,30 +60,32 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
-Add crop/copy object
+* Add crop/copy object
 
-Mac/ Linux support-test improvements
+* Mac/ Linux support-test improvements
 
-Better snapping / alignment guides
+* Better snapping / alignment guides
 
-SVG export
+* SVG export
 
-Shortcut key fix
+* Shortcut key fix
 
-Shape insert enhancement /  shape rotation fix 
+* Shape insert enhancement /  shape rotation fix 
 
-add simple manual file
+* add simple manual file
 
-Open new canvas option
+* Open new canvas option
 
-Auto plot placement fails, rewrite the function to handle smart placement based on import order
+* add hint on keys when mouse hovers 
 
-add hint on keys when mouse hovers 
+~~Auto plot placement fails, rewrite the function to handle smart placement based on import order~~
+
+
 
 
 ## Citation
 
 If you use FigPie, please cite:
 
-Taghipourbibalan, H. (2026). FigPie (Version 0.1.3) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19353974
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.4) [Software]. Zenodo.  
+https://doi.org/10.5281/zenodo.19370653
