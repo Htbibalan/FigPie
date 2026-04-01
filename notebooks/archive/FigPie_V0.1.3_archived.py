@@ -84,7 +84,7 @@ class SplashScreen:
         self.root.destroy()
 
 APP_TITLE = "FigPie 🍰"
-PROJECT_VERSION = 1.4
+PROJECT_VERSION = 1.3
 DEFAULT_CANVAS_W = 1600
 DEFAULT_CANVAS_H = 1200
 DEFAULT_BG = "white"
@@ -1490,26 +1490,6 @@ class FigureBoardApp:
         out = self.next_group_id
         self.next_group_id += 1
         return out
-    def get_next_append_position(self, w: int, h: int) -> Tuple[int, int]: #🚧🚧🚧🚧🚧🚧🚧🚧🚧 v0.1.4 new function, fixing the import arrangement
-        margin = self.outer_margin.get()
-        gap_x = max(self.gap_x.get(), SAFE_GAP)
-        gap_y = max(self.gap_y.get(), SAFE_GAP)
-
-        panels = [i for i in self.items if isinstance(i, PanelItem)]
-        if not panels:
-            return margin, margin
-
-        panels = sorted(panels, key=lambda p: (p.y, p.x))
-        last = panels[-1]
-
-        x = last.x + last.w + gap_x
-        y = last.y
-
-        if x + w > self.canvas_w - margin:
-            x = margin
-            y = max(p.y + p.h for p in panels) + gap_y
-
-        return x, y        
 
     def add_files(self):
         filetypes = [
@@ -1548,7 +1528,9 @@ class FigureBoardApp:
             except Exception as e:
                 messagebox.showerror("Import error", f"Could not open:\n{path}\n\n{e}")
         if added:
-            self.set_status(f"Added {added} item(s)") #🚧🚧🚧🚧🚧🚧🚧🚧🚧 v0.1.4 fix
+            self.regenerate_labels(silent=True)
+            self.auto_grid_if_reasonable()
+            self.set_status(f"Added {added} item(s)")
 
     def _load_image_path(self, path: str):
         img = Image.open(path).convert("RGBA")
@@ -1574,95 +1556,49 @@ class FigureBoardApp:
         except Exception as e:
             messagebox.showerror("Clipboard error", f"Could not access clipboard.\n\n{e}")
             return
-
-
-         #🚧🚧🚧🚧🚧🚧🚧🚧🚧 v0.1.4 fix  rearrangement of plots 
         if isinstance(data, Image.Image):
             self.save_undo_state()
             self._add_panel_from_pil(data.convert("RGBA"), source_path="clipboard")
+            self.regenerate_labels(silent=True)
+            self.auto_grid_if_reasonable()
             self.redraw()
             self.set_status("Pasted image from clipboard")
-            return    
-        # if isinstance(data, Image.Image):
-        #     self.save_undo_state()
-        #     self._add_panel_from_pil(data.convert("RGBA"), source_path="clipboard")
-        #     self.redraw()
-        #     self.set_status("Pasted image from clipboard")
-
-
-
-
-
-        #     self.save_undo_state()
-        #     self._add_panel_from_pil(data.convert("RGBA"), source_path="clipboard")
-        #     self.regenerate_labels(silent=True)
-        #     self.auto_grid_if_reasonable()
-        #     self.redraw()
-        #     self.set_status("Pasted image from clipboard")
-        #     return
-        # if isinstance(data, list):
-        #     self.save_undo_state()
-        #     self.load_paths([str(p) for p in data])
-        #     self.redraw()
-        #     return
+            return
+        if isinstance(data, list):
+            self.save_undo_state()
+            self.load_paths([str(p) for p in data])
+            self.redraw()
+            return
         messagebox.showinfo("Clipboard", "No image or file list found in clipboard.")
 
-    # def _add_panel_from_pil(self, img: Image.Image, source_path: Optional[str] = None):
-    #     ow, oh = img.size
-    #     w, h = fit_size_keep_aspect(ow, oh, 350, 260)
-    #     offset = 20 * (len(self.items) % 10)
-    #     # panel = PanelItem(
-    #     #     id=self.get_next_id(),
-    #     #     source_path=source_path,
-    #     #     pil_image=img,
-    #     #     original_size=(ow, oh),
-    #     #     x=50 + offset,
-    #     #     y=50 + offset,
-    #     #     w=w,
-    #     #     h=h,
-    #     #     label="",
-    #     #     show_label=True,
-    #     #     label_font_size=self.default_label_size.get(),
-    #     #     label_font_family=self.default_font_family.get(),
-    #     #     label_offset_x=self.default_label_offset_x.get(),
-    #     #     label_offset_y=self.default_label_offset_y.get(),
-    #     #     z_index=max((i.z_index for i in self.items), default=-1) + 1,
-    #     # )
-    #     panel = PanelItem(
-    #         id=self.get_next_id(),
-    #         source_path=source_path,
-    #         pil_image=img,
-    #         original_size=(ow, oh),
-    #         x=50 + offset,
-    #         y=50 + offset,
-    #         w=w,
-    #         h=h,
-    #         label="",
-    #         show_label=True,
-    #         label_font_size=self.default_label_size.get(),
-    #         label_font_family=self.default_font_family.get(),
-    #         label_color="black",
-    #         label_offset_x=self.default_label_offset_x.get(),
-    #         label_offset_y=self.default_label_offset_y.get(),
-    #         z_index=max((i.z_index for i in self.items), default=-1) + 1,
-    #     )
-    #     self.items.append(panel)
-    #     self.selected_ids = [panel.id]
-    #     self.anchor_selected_id = panel.id
-    
-    #🚧🚧🚧🚧🚧🚧🚧🚧🚧 v0.1.4 fix
     def _add_panel_from_pil(self, img: Image.Image, source_path: Optional[str] = None):
         ow, oh = img.size
         w, h = fit_size_keep_aspect(ow, oh, 350, 260)
-        x, y = self.get_next_append_position(w, h)
-
+        offset = 20 * (len(self.items) % 10)
+        # panel = PanelItem(
+        #     id=self.get_next_id(),
+        #     source_path=source_path,
+        #     pil_image=img,
+        #     original_size=(ow, oh),
+        #     x=50 + offset,
+        #     y=50 + offset,
+        #     w=w,
+        #     h=h,
+        #     label="",
+        #     show_label=True,
+        #     label_font_size=self.default_label_size.get(),
+        #     label_font_family=self.default_font_family.get(),
+        #     label_offset_x=self.default_label_offset_x.get(),
+        #     label_offset_y=self.default_label_offset_y.get(),
+        #     z_index=max((i.z_index for i in self.items), default=-1) + 1,
+        # )
         panel = PanelItem(
             id=self.get_next_id(),
             source_path=source_path,
             pil_image=img,
             original_size=(ow, oh),
-            x=x,
-            y=y,
+            x=50 + offset,
+            y=50 + offset,
             w=w,
             h=h,
             label="",
@@ -1677,14 +1613,6 @@ class FigureBoardApp:
         self.items.append(panel)
         self.selected_ids = [panel.id]
         self.anchor_selected_id = panel.id
-
-
-
-
-
-
-
-
 
     def add_text_box(self, default_text="Text"):
         self.save_undo_state()
