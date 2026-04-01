@@ -59,21 +59,22 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 
 ### 🛠️ To-Do/ Updates needed:
+
+Add crop/copy object
+
 Mac/ Linux support-test improvements
 
 Better snapping / alignment guides
 
 SVG export
 
-G.interface enhancement, remove auxiliary and old double-functions
-
 Shortcut key fix
 
-Reconfigure GUI buttons left-right panel 
-
-Shape insert enhancement 
+Shape insert enhancement /  shape rotation fix 
 
 add simple manual file
+
+Open new canvas option
 
 
 ## Citation
