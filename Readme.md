@@ -78,7 +78,7 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 * add hint on keys when mouse hovers 
 
-
+* fix Gap Y field mask
 
 ~~Auto plot placement fails, rewrite the function to handle smart placement based on import order~~
 
