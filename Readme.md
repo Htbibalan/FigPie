@@ -80,6 +80,10 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 * fix Gap Y field mask
 
+* add smart stat symbol feature 
+
+* warning/save before close
+
 ~~Auto plot placement fails, rewrite the function to handle smart placement based on import order~~
 
 
