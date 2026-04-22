@@ -1,4 +1,4 @@
-# 🍰 FigPie:   Make scientific figures as easy as pie
+# 🍰 FigPie:   Assemble  scientific figures as easy as pie
 ##### 🚧🏗️ Under construction, check for updates.🏗️🚧
 #### FigPie is a lightweight, drag-and-drop GUI tool for assembling scientific figures from images, PDFs, and plots without needing heavy,expensive or overkill software like Illustrator, Affinity,  PowerPoint and such. It is designed based on my lived-experience for researchers who want fast, clean, publication-ready figures.
 
@@ -9,25 +9,16 @@
 
 ## ✨ Features
 
-📁 Drag & drop images and PDFs to the canvas
-
-🤖 Automatic and smart panel labelling (A, B, C…)
-
+🤖 Automatic and smart panel labelling
+🤖 Smart stat symbol placement
+🪚 Trim, Crop and Erase unwanted objects off the plots
 🧩 Flexible layout (grid, manual, alignment tools)
-
-✏️ Rich text editor (bold, italic, alignment, rotation)
-
-🔲 Add shapes: rectangle, circle, line, arrow
-
+🔲 Add shapes: rectangle, circle, line, arrow, highlight bars
 🎯 Easy precise positioning & resizing
-
 📏 Custom and auto-adjustable canvas size
-
 ✂️ Automatic and easy white/blank-space cropping and trimming of final product
-
 💾 Save / load projects to work later
-
-🖼️ Export to: PNG,TIFF, and PDF
+🖼️ Export to: PNG,TIFF,SVG and PDF
 
 
 
@@ -60,13 +51,13 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
-* Add crop/copy object, trim image
+~~Add crop/copy object, trim image~~
 
 * Mac/ Linux support-test improvements
 
-* Better snapping / alignment guides
+* Better snapping / alignment guides (Auto V and H needs enhancement)
 
-* SVG export
+~~SVG export~~
 
 * Shortcut key fix
 
@@ -74,15 +65,15 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 * add simple manual file
 
-* Open new canvas option
+* Open new canvas option / fix the override problem
 
 * add hint on keys when mouse hovers 
 
-* fix Gap Y field mask
+~~fix Gap Y field mask~~
 
-* add smart stat symbol feature 
+~~add smart stat symbol feature~~
 
-* warning/save before close
+~~warning/save before close~~ 
 
 ~~Auto plot placement fails, rewrite the function to handle smart placement based on import order~~
 
