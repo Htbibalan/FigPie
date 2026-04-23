@@ -31,6 +31,27 @@
 
 
 
+## Example workflow
+
+![stat_example_00 Image](https://github.com/Htbibalan/FigPie/blob/master/src/stat_example_00.gif)
+![stat_example_01 Image](https://github.com/Htbibalan/FigPie/blob/master/src/stat_example_01.gif)
+*You can select the type of stat symbol and level of statistical significance and add them on the plot by two click*
+
+
+![erase_function Image](https://github.com/Htbibalan/FigPie/blob/master/src/Erase_mode.gif)
+*The eraser helps you remove unwanted parts of the plots or images*
+
+![generate_label Image](https://github.com/Htbibalan/FigPie/blob/master/src/labels.gif)
+![generate_label Image](https://github.com/Htbibalan/FigPie/blob/master/src/label_regenerate.gif)
+ *Generate and edit labels easily and if the order of plots/panels is changed, regenerate them automatically*
+
+
+![align](https://github.com/Htbibalan/FigPie/blob/master/src/align.gif)
+*Align and arrange the plots*
+
+
+
+
 ## 🖥️ Installation
 ##### Option 1: 
         
