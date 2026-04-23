@@ -10,14 +10,23 @@
 ## ✨ Features
 
 🤖 Automatic and smart panel labelling
+
 🤖 Smart stat symbol placement
+
 🪚 Trim, Crop and Erase unwanted objects off the plots
+
 🧩 Flexible layout (grid, manual, alignment tools)
+
 🔲 Add shapes: rectangle, circle, line, arrow, highlight bars
+
 🎯 Easy precise positioning & resizing
+
 📏 Custom and auto-adjustable canvas size
+
 ✂️ Automatic and easy white/blank-space cropping and trimming of final product
+
 💾 Save / load projects to work later
+
 🖼️ Export to: PNG,TIFF,SVG and PDF
 
 
@@ -84,5 +93,5 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 If you use FigPie, please cite:
 
-Taghipourbibalan, H. (2026). FigPie (Version 0.1.5) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19375890
+Taghipourbibalan, H. (2026). FigPie (Version 0.1.6) [Software]. Zenodo.  
+https://doi.org/10.5281/zenodo.19712900
