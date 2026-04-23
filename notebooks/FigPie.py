@@ -267,19 +267,59 @@ def svg_color_opacity(color: str, alpha: int) -> Tuple[str, float]:
     return color if color else "none", max(0.0, min(1.0, alpha / 255.0))
 
 
-def trim_bbox_from_image(img: Image.Image) -> Optional[Tuple[int, int, int, int]]:
+
+
+
+def trim_bbox_from_image(img: Image.Image, tolerance: int = 12) -> Optional[Tuple[int, int, int, int]]:
     rgba = img.convert("RGBA")
-    alpha_bbox = rgba.getchannel("A").getbbox()
-    bg = Image.new("RGBA", rgba.size, rgba.getpixel((0, 0)))
-    diff = ImageChops.difference(rgba, bg)
-    diff_bbox = diff.getbbox()
-    if alpha_bbox and diff_bbox:
-        x1 = min(alpha_bbox[0], diff_bbox[0])
-        y1 = min(alpha_bbox[1], diff_bbox[1])
-        x2 = max(alpha_bbox[2], diff_bbox[2])
-        y2 = max(alpha_bbox[3], diff_bbox[3])
-        return x1, y1, x2, y2
-    return alpha_bbox or diff_bbox
+    w, h = rgba.size
+
+    alpha = rgba.getchannel("A")
+    alpha_bbox = alpha.getbbox()
+
+    if alpha_bbox:
+        ax1, ay1, ax2, ay2 = alpha_bbox
+        if ax1 > 0 or ay1 > 0 or ax2 < w or ay2 < h:
+            return alpha_bbox
+
+    corners = [
+        rgba.getpixel((0, 0)),
+        rgba.getpixel((w - 1, 0)),
+        rgba.getpixel((0, h - 1)),
+        rgba.getpixel((w - 1, h - 1)),
+    ]
+
+    def rgb_dist(a, b):
+        return sum(abs(a[i] - b[i]) for i in range(3))
+
+    bg = max(set(corners), key=corners.count)
+
+    px = rgba.load()
+    min_x, min_y = w, h
+    max_x, max_y = -1, -1
+
+    for y in range(h):
+        for x in range(w):
+            p = px[x, y]
+            if p[3] == 0:
+                continue
+            if rgb_dist(p, bg) > tolerance or abs(p[3] - bg[3]) > tolerance:
+                if x < min_x:
+                    min_x = x
+                if y < min_y:
+                    min_y = y
+                if x > max_x:
+                    max_x = x
+                if y > max_y:
+                    max_y = y
+
+    if max_x == -1 or max_y == -1:
+        return None
+
+    return (min_x, min_y, max_x + 1, max_y + 1)
+
+
+
 
 
 class SplashScreen:
@@ -892,18 +932,49 @@ class FigureBoardApp:
         self.small_button_row(group_box, [("Select all", self.select_all_items, 10), ("Group", self.group_selected, 8), ("Ungroup", self.ungroup_selected, 9)])
         self.small_button_row(group_box, [("Duplicate", self.duplicate_selected, 10), ("Delete", self.delete_selected, 8)])
 
+       
+
+
+
         edit_box = tk.LabelFrame(left, text="Edit", bg="white", fg="purple", bd=1, font=("Cascadia Code", 12, "bold"))
         edit_box.pack(fill="x", pady=(0, 8))
-        self.small_button_row(edit_box, [("Undo", self.undo, 7), ("Redo", self.redo, 7), ("Colour", self.pick_selected_text_colour, 8)])
-        self.small_button_row(edit_box, [("Text", self.add_text_box, 7), ("Caption", lambda: self.add_text_box(default_text="Caption"), 8)])
-        ttk.Button(edit_box, text="Auto caption below panels", command=self.add_caption_below_last_figure).pack(fill="x", padx=6, pady=3)
-        self.small_button_row(edit_box, [("Trim image", self.trim_selected_image, 11), ("Crop canvas", self.crop_canvas_to_content, 12)])
+
+        self.small_button_row(
+            edit_box,
+            [("Undo", self.undo, 7), ("Redo", self.redo, 7), ("Colour", self.pick_selected_text_colour, 8), ("Text", self.add_text_box, 7)],
+            pady=3
+        )
+
+        ttk.Button(edit_box, text="Add caption below panels", command=self.add_caption_below_last_figure).pack(
+            fill="x", padx=6, pady=(1, 5)
+        )
+
+        self.small_button_row(edit_box, [("Trim image", self.trim_selected_image, 11), ("Crop canvas", self.crop_canvas_to_content, 12)], pady=3)
+
         mode_row = ttk.Frame(edit_box)
-        mode_row.pack(fill="x", padx=6, pady=3)
+        mode_row.pack(fill="x", padx=6, pady=(3, 4))
         self.crop_btn = tk.Button(mode_row, text="Crop OFF", command=self.toggle_crop_mode)
         self.erase_btn = tk.Button(mode_row, text="Erase OFF", command=self.toggle_erase_mode)
         self.crop_btn.pack(side="left", fill="x", expand=True, padx=2)
         self.erase_btn.pack(side="left", fill="x", expand=True, padx=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         export_box = tk.LabelFrame(left, text="Project and export 🎛️", bg="white", fg="red", bd=1, font=("Cascadia Code", 12, "bold"))
         export_box.pack(fill="x", pady=(0, 8))
@@ -983,7 +1054,7 @@ class FigureBoardApp:
 
         label_box = tk.LabelFrame(right, text="Labels", bg="white", fg="saddle brown", bd=1, font=("Cascadia Code", 12, "bold"))
         label_box.pack(fill="x", pady=(0, 8))
-        self.small_button_row(label_box, [("Regenerate", self.regenerate_labels, 13), ("Toggle", self.toggle_labels, 8)])
+        self.small_button_row(label_box, [("Generate", self.regenerate_labels, 13), ("Toggle", self.toggle_labels, 8)])
         ttk.Label(label_box, text="Default label size").pack(anchor="w", padx=6, pady=(5, 1))
         ttk.Spinbox(label_box, from_=8, to=120, textvariable=self.default_label_size, width=8, command=self.apply_default_label_size).pack(anchor="w", padx=6, pady=(0, 4))
         ttk.Label(label_box, text="Default font family").pack(anchor="w", padx=6, pady=(2, 1))
