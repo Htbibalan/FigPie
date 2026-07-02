@@ -81,6 +81,7 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
+* user feedback windows crashes after 9 plots loaded at the same time  ---  fix thread processing --- RAM utilization ⚠️
 ~~Add crop/copy object, trim image~~
 
 * Mac/ Linux support-test improvements
