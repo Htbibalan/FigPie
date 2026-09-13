@@ -81,6 +81,7 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
+* Add image replacement function
 ~~Add crop/copy object, trim image~~
 
 * Mac/ Linux support-test improvements
