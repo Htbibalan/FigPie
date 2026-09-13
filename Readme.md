@@ -81,7 +81,11 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
+<<<<<<< HEAD
 * Add image replacement function
+=======
+* user feedback windows crashes after 9 plots loaded at the same time  ---  fix thread processing --- RAM utilization ⚠️
+>>>>>>> 05d722fc66dc8f5ebd0428d77bcb612cfb78f0ad
 ~~Add crop/copy object, trim image~~
 
 * Mac/ Linux support-test improvements
