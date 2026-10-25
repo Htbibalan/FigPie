@@ -2,10 +2,24 @@
 ##### 🚧🏗️ Under construction, check for updates.🏗️🚧
 #### FigPie is a lightweight, drag-and-drop GUI tool for assembling scientific figures from images, PDFs, and plots without needing heavy,expensive or overkill software like Illustrator, Affinity,  PowerPoint and such. It is designed based on my lived-experience for researchers who want fast, clean, publication-ready figures.
 
+
+
+
+## ⬇️ Download FigPie for Windows
+
+**Latest version: v0.1.7**
+
+[**Download FigPieSetup.exe | Windows Installer**](https://github.com/Htbibalan/FigPie/releases/latest/download/FigPieSetup.exe)
+
+
+
 ## 🚀 Why FigPie?
 #### Many researchers and students generate plots in Python / R / MATLAB then struggle in Illustrator / PowerPoint.  FigPie removes that second step. It’s built specifically for papers , theses, presentations and scientific posters.
 
 ![Banner Image](https://github.com/Htbibalan/FigPie/blob/master/src/banner.png)
+
+
+
 
 ## ✨ Features
 
@@ -53,7 +67,7 @@
 
 
 ## 🖥️ Installation
-##### Option 1: 
+#### Option 1: Terminal commands for developers
         
         git clone https://github.com/Htbibalan/FigPie.git
         
@@ -65,12 +79,23 @@
 after env is created, run:
 
             conda activate FigPie
-Run:
+Run from /notebooks:
 
             python FigPie.py
-#### Option 2:
+<!-- #### Option 2:
 Windows users can download FigPieSetup.exe from the latest release and install it.
-https://github.com/Htbibalan/FigPie/releases/latest
+https://github.com/Htbibalan/FigPie/releases/latest -->
+
+
+#### Option 2: Windows installer (recommended)
+
+[**Download FigPieSetup.exe**](https://github.com/Htbibalan/FigPie/releases/latest/download/FigPieSetup.exe)
+
+Download and run the installer. No Python installation is required.
+
+
+
+
 
 Security settings might stop you from downloading, or if needed, right click on the setupfile and from Properties menu check " Unblock" box.
 
@@ -81,10 +106,10 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 ### 🛠️ To-Do/ Updates needed:
 
+* Expand panel columns - we are too narrow at the moment - - need to check how it looks on smaller screens - adaptable window
+~~Add image replacement function~~
 
-* Add image replacement function
-
-* user feedback windows crashes after 9 plots loaded at the same time  ---  fix thread processing --- RAM utilization ⚠️
+~~user feedback windows crashes after 9 plots loaded at the same time  ---  fix thread processing --- RAM utilization ⚠️~~
 
 ~~Add crop/copy object, trim image~~
 
@@ -115,9 +140,20 @@ Security settings might stop you from downloading, or if needed, right click on 
 
 
 
-## Citation
+<!-- ## Citation
 
 If you use FigPie, please cite:
 
 Taghipourbibalan, H. (2026). FigPie (Version 0.1.6) [Software]. Zenodo.  
-https://doi.org/10.5281/zenodo.19712900
+https://doi.org/10.5281/zenodo.19712900 -->
+
+
+## 📚 Citation
+
+If you use FigPie in your research, please cite:
+
+Taghipourbibalan, H. (2026). *FigPie* (Version 0.1.7) [Computer software]. Zenodo.
+
+https://doi.org/10.5281/zenodo.23645349
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23645349.svg)](https://doi.org/10.5281/zenodo.23645349)

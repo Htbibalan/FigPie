@@ -1,4 +1,34 @@
-cff-version: 1.6.0
+# cff-version: 1.6.0
+# title: "FigPie 🍰"
+# message: "If you use FigPie, please cite it as below."
+# type: software
+
+# authors:
+#   - family-names: "Taghipourbibalan"
+#     given-names: "Hamid"
+
+# year: 2026
+
+# version: "0.1.6"
+
+# doi: "10.5281/zenodo.19712900"
+
+
+# repository-code: "https://github.com/Htbibalan/FigPie"
+
+# abstract: >
+#   FigPie is a lightweight Python-based GUI tool for assembling
+#   scientific multi-panel figures from images, PDFs, and plots,
+#   with automatic labelling, flexible layout tools, and
+#   high-resolution export.
+
+# license: "Apache-2.0"
+
+# I used wrong cff version number
+
+
+
+cff-version: 1.2.0
 title: "FigPie 🍰"
 message: "If you use FigPie, please cite it as below."
 type: software
@@ -7,12 +37,10 @@ authors:
   - family-names: "Taghipourbibalan"
     given-names: "Hamid"
 
-year: 2026
+version: "0.1.7"
+date-released: "2026-10-25"
 
-version: "0.1.6"
-
-doi: "10.5281/zenodo.19712900"
-
+doi: "10.5281/zenodo.23645349"
 
 repository-code: "https://github.com/Htbibalan/FigPie"
 
@@ -23,6 +51,4 @@ abstract: >
   high-resolution export.
 
 license: "Apache-2.0"
-
-
 
